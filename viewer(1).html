@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Ficha</title>
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#111; color:#fff; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
+    #topbar {
+      position: fixed; top: 0; left: 0; right: 0; height: 48px;
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 10px; background: rgba(0,0,0,0.65); z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+    #btnClose, #btnZoomOut, #btnZoomIn {
+      border: 0; border-radius: 10px; padding: 8px 10px;
+      background: rgba(255,255,255,0.12); color:#fff; font-size: 14px;
+    }
+    #title { font-size: 14px; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #wrap { padding-top: 48px; height: calc(100% - 48px); overflow: auto; -webkit-overflow-scrolling: touch; }
+    #canvas { display:block; margin: 0 auto; background:#111; }
+    #msg { padding: 16px; max-width: 900px; margin: 0 auto; opacity: 0.9; }
+    #aviso-girar { display: none; padding: 10px 16px 0; font-size: 13px; opacity: 0.75; text-align: center; }
+    @media (max-width: 768px) and (orientation: portrait) { #aviso-girar { display: block; } }
+  </style>
+</head>
+<body>
+  <div id="topbar">
+    <button id="btnClose" type="button">Volver</button>
+    <button id="btnZoomOut" type="button" aria-label="Zoom -">−</button>
+    <button id="btnZoomIn" type="button" aria-label="Zoom +">+</button>
+    <div id="title">Cargando…</div>
+  </div>
+
+  <div id="wrap">
+    <div id="aviso-girar">Gira el móvil o pulsa + para leer la ficha más grande.</div>
+    <div id="msg"></div>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const file = params.get("file") || "fichas_vol2.pdf";
+    const requestedPage = Math.max(1, parseInt(params.get("page") || "1", 10));
+
+    const titleEl = document.getElementById("title");
+    const msgEl = document.getElementById("msg");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d", { alpha: false });
+    const wrap = document.getElementById("wrap");
+
+    // Zoom adicional controlado por botones (sobre el ajuste automático a pantalla)
+    let extraZoom = 1.0; // 1 = normal; 1.2 / 1.4 etc.
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    function showMsg(text) { msgEl.textContent = text; }
+
+    let pdfDoc = null;
+    let currentPage = null;
+
+    async function loadPdf() {
+      try {
+        pdfDoc = await pdfjsLib.getDocument(file).promise;
+      } catch (e) {
+        showMsg("No he podido cargar el PDF. Verifica que existe y que el nombre coincide exactamente.");
+        console.error(e);
+        return;
+      }
+      currentPage = Math.min(requestedPage, pdfDoc.numPages);
+      await render();
+    }
+
+    async function render() {
+      if (!pdfDoc) return;
+
+      titleEl.textContent = `Ficha (pág. ${currentPage} de ${pdfDoc.numPages})`;
+      showMsg("");
+
+      let page;
+      try {
+        page = await pdfDoc.getPage(currentPage);
+      } catch (e) {
+        showMsg("No he podido abrir la página solicitada.");
+        console.error(e);
+        return;
+      }
+
+      // 1) Escala para encajar en ancho disponible (CSS px)
+      const viewport1 = page.getViewport({ scale: 1 });
+      const targetWidthCss = Math.min(1100, wrap.clientWidth - 20);
+      const fitScale = (targetWidthCss / viewport1.width) * extraZoom;
+      const viewportCss = page.getViewport({ scale: fitScale });
+
+      // 2) Render en alta resolución real (pixeles de dispositivo)
+      // Limito DPR para no reventar memoria en móviles muy bestias
+      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+
+      // Tamaño real del canvas en píxeles
+      canvas.width  = Math.floor(viewportCss.width * dpr);
+      canvas.height = Math.floor(viewportCss.height * dpr);
+
+      // Tamaño visible del canvas en CSS píxeles
+      canvas.style.width  = Math.floor(viewportCss.width) + "px";
+      canvas.style.height = Math.floor(viewportCss.height) + "px";
+
+      // Escalo el contexto para dibujar nítido
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+
+      // Renderiza usando el viewport CSS (porque ya escalamos con dpr en el contexto)
+      await page.render({ canvasContext: ctx, viewport: viewportCss }).promise;
+
+      wrap.scrollTop = 0;
+    }
+
+    document.getElementById("btnClose").addEventListener("click", () => {
+      if (history.length > 1) history.back();
+      else location.href = "index.html";
+    });
+
+    document.getElementById("btnZoomIn").addEventListener("click", async () => {
+      extraZoom = Math.min(extraZoom + 0.25, 3.5);
+      await render();
+    });
+
+    document.getElementById("btnZoomOut").addEventListener("click", async () => {
+      extraZoom = Math.max(extraZoom - 0.25, 0.8);
+      await render();
+    });
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => render(), 120);
+    });
+
+    // Dentro del mapa en escritorio ya hay un botón de cerrar: se oculta "Volver"
+    if (window.self !== window.top) document.getElementById("btnClose").style.display = "none";
+
+    loadPdf();
+  </script>
+</body>
+</html>
