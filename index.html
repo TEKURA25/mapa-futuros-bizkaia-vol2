@@ -35,6 +35,8 @@
     @media (max-width: 768px) {
       .titulo { font-size: 11px; max-width: 200px; padding: 5px 8px; }
     }
+    .titulo { font-size: 11px; max-width: 200px; padding: 5px 8px; }
+    }
     /* Leyenda por temática, con filtro */
     .leyenda { background: rgba(255,255,255,0.94); padding: 8px 10px; border-radius: 6px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.25); font-size: 12px; color: #222; max-width: 230px; }
@@ -100,14 +102,9 @@
   // prep = true: ficha en preparación (dummy en el borrador).
   const iniciativas = [
     { id:"3dlan-getxo",  name:"3DLAN",  tema:"educacion", page:1,  lat:43.3440, lng:-3.0060, dir:"Urgull kalea 4 (Getxo Sormen Hub), 48991 Getxo", aprox:true },
-    { id:"3dlan-bkd",    name:"3DLAN",  tema:"educacion", page:1,  lat:43.2960, lng:-2.9900, dir:"Avda. de la Libertad 65, 48901 Barakaldo", aprox:true },
     { id:"baiby",        name:"bai&by", tema:"lengua",    page:2,  lat:43.2617, lng:-2.9310, dir:"Alameda de Urkijo 22, Bilbao (academia)", aprox:true },
     { id:"apnabi-bio",   name:"APNABI Autismo Bizkaia", tema:"educacion", page:3, lat:43.2650, lng:-2.9480, dir:"Sabino Arana 69, 48012 Bilbao", aprox:true },
-    { id:"apnabi-derio", name:"APNABI Autismo Bizkaia (centro de Derio)", tema:"educacion", page:3, lat:43.3050, lng:-2.8820, dir:"Derio (dirección del centro pendiente)", aprox:true },
-    { id:"nbs-sestao",   name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:43.3080, lng:-3.0040, dir:"Caso de Sestao (pradera junto al Alto Horno)", aprox:true, prep:true },
-    { id:"nbs-errigoiti",name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:43.3700, lng:-2.7180, dir:"Caso de Errigoiti (humedal depurador)", aprox:true, prep:true },
-    { id:"nbs-orduna",   name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:42.9940, lng:-3.0090, dir:"Caso de Orduña (patio escolar)", aprox:true, prep:true },
-    { id:"nbs-bilbao",   name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:43.2610, lng:-2.9420, dir:"Caso de Bilbao (calle María Díaz de Haro)", aprox:true, prep:true },
+    { id:"ihobe",        name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:43.2612, lng:-2.9395, dir:"Ihobe, Alameda Urquijo 36, 48011 Bilbao", aprox:true, prep:true },
     { id:"sanluis",      name:"Centro San Luis Indautxu", tema:"educacion", page:5, lat:43.2625, lng:-2.9400, dir:"Licenciado Poza 31, 48011 Bilbao", aprox:true },
     { id:"gaman",        name:"Gaman", tema:"autonomia", page:6, lat:43.2870, lng:-2.8560, dir:"Polígono Ugaldeguren III, parcela 28B, 48170 Zamudio", aprox:true },
     { id:"gaptain",      name:"Gaptain", tema:"educacion", page:7, lat:43.4050, lng:-2.9460, dir:"Plentzia (48620)", aprox:true },
@@ -116,7 +113,6 @@
     { id:"koiki",        name:"Koiki", tema:"movilidad", page:10, lat:43.2580, lng:-2.9250, dir:"Bilbao (dirección pendiente)", aprox:true },
     { id:"gogoa",        name:"Gogoa", tema:"autonomia", page:11, lat:43.1540, lng:-2.6100, dir:"Arzubia 10b, 48220 Abadiño", aprox:true, prep:true },
     { id:"qubiz-bio",    name:"Qubiz.team", tema:"transversal", page:12, lat:43.2627, lng:-2.9250, dir:"Torre BAT, Gran Vía 1, 48001 Bilbao", aprox:true, prep:true },
-    { id:"qubiz-leioa",  name:"Qubiz.team (laboratorio)", tema:"transversal", page:12, lat:43.3310, lng:-2.9680, dir:"Facultad de Ciencia y Tecnología EHU, Barrio Sarriena s/n, 48940 Leioa", aprox:true, prep:true },
     { id:"sua",          name:"SUA Solutions", tema:"autonomia", page:13, lat:43.2622, lng:-2.9262, dir:"Torre BAT, Bilbao (por confirmar)", aprox:true, prep:true },
     { id:"ubikare",      name:"Ubikare", tema:"salud", page:14, lat:43.3050, lng:-2.9730, dir:"Erandio", aprox:true },
     { id:"pappstor",     name:"Pappstor", tema:"territorio", page:15, lat:43.2560, lng:-2.9150, dir:"Bilbao (dirección pendiente)", aprox:true, prep:true },
@@ -162,31 +158,27 @@
   overlay.addEventListener("click", (e) => { if (e.target === overlay) cerrarFicha(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarFicha(); });
 
-  // Pin SVG (mismo dibujo que el Vol. 1). Las fichas en preparación, con relleno claro.
-  function createPinIcon(color, size, prep) {
+  // Pin SVG: el mismo del Vol. 1, verde musgo para todas las iniciativas
+  const VERDE = "#177a3b";
+  function createPinIcon(color, size) {
     const w = size, h = size * 1.4;
-    const fill = prep ? "#ffffff" : color;
-    const dot = prep ? color : "#ffffff";
     const svg = `
       <svg width="${w}" height="${h}" viewBox="0 0 24 34" xmlns="http://www.w3.org/2000/svg">
         <g style="filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4))">
           <path d="M12 1 C7 1 3 5 3 10 C3 16 8 21 12 26 C16 21 21 16 21 10 C21 5 17 1 12 1 Z"
-                fill="${fill}" stroke="${prep ? color : "#333"}" stroke-width="${prep ? 2 : 1}"/>
-          <circle cx="12" cy="10" r="4" fill="${dot}"/>
+                fill="${color}" stroke="#333" stroke-width="1"/>
+          <circle cx="12" cy="10" r="4" fill="white"/>
         </g>
       </svg>`;
     return L.divIcon({ html: svg, className: "pin-icon", iconSize: [w, h],
       iconAnchor: [w / 2, h], popupAnchor: [0, -h] });
   }
 
-  const capas = {};
-  Object.keys(TEMAS).forEach(k => capas[k] = L.layerGroup().addTo(map));
   const marcadores = [];
 
   iniciativas.forEach((it) => {
-    const tema = TEMAS[it.tema];
     const marker = L.marker([it.lat, it.lng], {
-      icon: createPinIcon(tema.color, TACTIL ? 32 : 28, it.prep),
+      icon: createPinIcon(VERDE, TACTIL ? 32 : 26),
       draggable: EDITAR,
       title: it.name
     });
@@ -206,32 +198,9 @@
       marker.on("click", () => { if (!EDITAR) abrirFicha(it.page); });
     }
     if (EDITAR) marker.on("dragend", volcarCoordenadas);
-    marker.addTo(capas[it.tema]);
+    marker.addTo(map);
     marcadores.push({ it, marker });
   });
-
-  // Leyenda con casillas para filtrar por temática
-  const leyenda = L.control({ position: "bottomright" });
-  leyenda.onAdd = () => {
-    const div = L.DomUtil.create("div", "leyenda");
-    let html = `<h4>Temáticas <button class="leyenda-toggle" type="button" aria-label="Mostrar u ocultar leyenda">▾</button></h4><div class="cuerpo">`;
-    Object.entries(TEMAS).forEach(([k, t]) => {
-      const n = new Set(iniciativas.filter(i => i.tema === k).map(i => i.page)).size;
-      html += `<label><input type="checkbox" data-tema="${k}" checked>
-               <span class="sw" style="background:${t.color}"></span>${t.nombre} (${n})</label>`;
-    });
-    html += `<div class="nota">Pin blanco: ficha en preparación. Haz clic en un pin para abrir la ficha.</div></div>`;
-    div.innerHTML = html;
-    L.DomEvent.disableClickPropagation(div);
-    div.querySelectorAll("input").forEach(cb => cb.addEventListener("change", (e) => {
-      const capa = capas[e.target.dataset.tema];
-      e.target.checked ? capa.addTo(map) : map.removeLayer(capa);
-    }));
-    div.querySelector(".leyenda-toggle").addEventListener("click", () => div.classList.toggle("cerrada"));
-    if (window.matchMedia("(max-width: 768px)").matches) div.classList.add("cerrada");
-    return div;
-  };
-  leyenda.addTo(map);
 
   // Modo edición: arrastrar pins y copiar las coordenadas resultantes
   function volcarCoordenadas() {
