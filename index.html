@@ -32,10 +32,6 @@
     .leaflet-popup-content { margin: 10px 12px; font-size: 13px; line-height: 1.4; }
     .leaflet-popup-content .dir { color: #555; font-size: 12px; }
     .leaflet-popup-content .prep { color: #8a6d00; font-size: 12px; font-style: italic; }
-    @media (max-width: 768px) {
-      .titulo { font-size: 11px; max-width: 200px; padding: 5px 8px; }
-    }
-    .titulo { font-size: 11px; max-width: 200px; padding: 5px 8px; }
     }
     /* Leyenda por temática, con filtro */
     .leyenda { background: rgba(255,255,255,0.94); padding: 8px 10px; border-radius: 6px;
@@ -52,8 +48,6 @@
         font-size: 13px; cursor: pointer; color: #7b1433; }
     }
 
-    .titulo { background: rgba(255,255,255,0.92); padding: 6px 10px; border-radius: 6px;
-      font-size: 13px; color: #7b1433; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 
     /* Modo edición (?editar=1): para colocar cada pin en su dirección exacta */
     #panel-editar { position: fixed; left: 10px; bottom: 24px; z-index: 900; width: 360px;
@@ -103,7 +97,7 @@
   // Orden alfabético = orden de las páginas de fichas_vol2.pdf (26/11/2026)
   const iniciativas = [
     { id:"3dlan", name:"3DLAN", page:1, lat:43.3440, lng:-3.0060, dir:"Urgull kalea 4 (Getxo Sormen Hub), 48991 Getxo", aprox:true },
-    { id:"a90grados", name:"A90grados", page:2, lat:43.2960, lng:-2.9900, dir:"Barakaldo (pin de la ficha; sin calle)", aprox:true },
+    { id:"a90grados", name:"A90GRADOS", page:2, lat:43.2960, lng:-2.9900, dir:"Barakaldo (pin de la ficha; sin calle)", aprox:true },
     { id:"adembi", name:"ADEMBI", page:3, lat:43.2730, lng:-2.9545, dir:"Ibarrekolanda 17 trasera, 48015 Bilbao", aprox:true },
     { id:"aholab", name:"Aholab (HiTZ-EHU)", page:4, lat:43.2625, lng:-2.9490, dir:"Escuela de Ingeniería de Bilbao, Plaza Ingeniero Torres Quevedo 1, 48013 Bilbao", aprox:true },
     { id:"apnabi", name:"APNABI Autismo Bizkaia", page:5, lat:43.2650, lng:-2.9480, dir:"Sabino Arana 69, 48012 Bilbao", aprox:true },
@@ -138,14 +132,6 @@
     maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"
   }).addTo(map);
 
-  // Título
-  const titulo = L.control({ position: "topright" });
-  titulo.onAdd = () => {
-    const d = L.DomUtil.create("div", "titulo");
-    d.textContent = "Futuros que se cultivan en Bizkaia. Tecnología para las personas";
-    return d;
-  };
-  titulo.addTo(map);
 
   // Ficha en grande
   const overlay = document.getElementById("pdf-overlay");
@@ -205,6 +191,9 @@
     marker.addTo(map);
     marcadores.push({ it, marker });
   });
+
+  // Encuadre inicial: todas las iniciativas a la vista, en PC y en móvil
+  map.fitBounds(L.latLngBounds(iniciativas.map(i => [i.lat, i.lng])), { padding: [30, 40] });
 
   // Modo edición: arrastrar pins y copiar las coordenadas resultantes
   function volcarCoordenadas() {
