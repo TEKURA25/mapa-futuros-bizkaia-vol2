@@ -100,31 +100,34 @@
   // dir = dirección que se muestra al pasar por encima (fuente en mapa_iniciativas_direcciones.csv).
   // aprox = true: coordenadas aproximadas, pendientes de colocar en la dirección exacta.
   // prep = true: ficha en preparación (dummy en el borrador).
+  // Orden alfabético = orden de las páginas de fichas_vol2.pdf (26/11/2026)
   const iniciativas = [
-    { id:"3dlan-getxo",  name:"3DLAN",  tema:"educacion", page:1,  lat:43.3440, lng:-3.0060, dir:"Urgull kalea 4 (Getxo Sormen Hub), 48991 Getxo", aprox:true },
-    { id:"baiby",        name:"bai&by", tema:"lengua",    page:2,  lat:43.2617, lng:-2.9310, dir:"Alameda de Urkijo 22, Bilbao (academia)", aprox:true },
-    { id:"apnabi-bio",   name:"APNABI Autismo Bizkaia", tema:"educacion", page:3, lat:43.2650, lng:-2.9480, dir:"Sabino Arana 69, 48012 Bilbao", aprox:true },
-    { id:"ihobe",        name:"Soluciones Basadas en la Naturaleza. Ihobe", tema:"territorio", page:4, lat:43.2612, lng:-2.9395, dir:"Ihobe, Alameda Urquijo 36, 48011 Bilbao", aprox:true, prep:true },
-    { id:"sanluis",      name:"Centro San Luis Indautxu", tema:"educacion", page:5, lat:43.2625, lng:-2.9400, dir:"Licenciado Poza 31, 48011 Bilbao", aprox:true },
-    { id:"gaman",        name:"Gaman", tema:"autonomia", page:6, lat:43.2870, lng:-2.8560, dir:"Polígono Ugaldeguren III, parcela 28B, 48170 Zamudio", aprox:true },
-    { id:"gaptain",      name:"Gaptain", tema:"educacion", page:7, lat:43.4050, lng:-2.9460, dir:"Plentzia (48620)", aprox:true },
-    { id:"heuristik",    name:"Heuristik", tema:"salud", page:8, lat:43.2900, lng:-2.8650, dir:"Zamudio", aprox:true },
-    { id:"kuvu",         name:"Kuvu", tema:"autonomia", page:9, lat:43.2660, lng:-2.9285, dir:"Uribitarte 6, 48001 Bilbao", aprox:true },
-    { id:"koiki",        name:"Koiki", tema:"movilidad", page:10, lat:43.2580, lng:-2.9250, dir:"Bilbao (dirección pendiente)", aprox:true },
-    { id:"gogoa",        name:"Gogoa", tema:"autonomia", page:11, lat:43.1540, lng:-2.6100, dir:"Arzubia 10b, 48220 Abadiño", aprox:true, prep:true },
-    { id:"qubiz-bio",    name:"Qubiz.team", tema:"transversal", page:12, lat:43.2627, lng:-2.9250, dir:"Torre BAT, Gran Vía 1, 48001 Bilbao", aprox:true, prep:true },
-    { id:"sua",          name:"SUA Solutions", tema:"autonomia", page:13, lat:43.2622, lng:-2.9262, dir:"Torre BAT, Bilbao (por confirmar)", aprox:true, prep:true },
-    { id:"ubikare",      name:"Ubikare", tema:"salud", page:14, lat:43.3050, lng:-2.9730, dir:"Erandio", aprox:true },
-    { id:"pappstor",     name:"Pappstor", tema:"territorio", page:15, lat:43.2560, lng:-2.9150, dir:"Bilbao (dirección pendiente)", aprox:true, prep:true },
-    { id:"biobizkaia",   name:"Plataforma de Impresión 3D y Bioimpresión del IIS Biobizkaia (3B3D)", tema:"salud", page:16, lat:43.2835, lng:-2.9855, dir:"Hospital Universitario Cruces, Barakaldo", aprox:true, prep:true },
-    { id:"lantegi",      name:"Lantegi Batuak", tema:"trabajo", page:17, lat:43.3000, lng:-2.9300, dir:"Txorierri etorbidea 12, 48180 Loiu (y red de centros)", aprox:true, prep:true },
-    { id:"innitius",     name:"Innitius", tema:"salud", page:18, lat:43.2935, lng:-2.8690, dir:"Astondo Bidea 612, Parque Tecnológico de Bizkaia, 48160 Derio", aprox:true, prep:true },
-    { id:"ekiola",       name:"Lea Artibaiko Ekiola S.Koop.", tema:"transversal", page:19, lat:43.2480, lng:-2.4800, dir:"Parque solar de Etxebarria, junto a la ETAP de Iparragirre", aprox:true, prep:true },
-    { id:"ekhilur",      name:"Ekhilur E. Koop.", tema:"transversal", page:20, lat:43.2565, lng:-2.9215, dir:"Ekonopolo, Harrobi Plaza 4, 48003 Bilbao", aprox:true, prep:true },
-    { id:"aholab",       name:"Aholab (EHU)", tema:"voz", page:21, lat:43.2625, lng:-2.9490, dir:"Escuela de Ingeniería de Bilbao, Plaza Ingeniero Torres Quevedo 1, 48013 Bilbao", aprox:true, prep:true },
-    { id:"emeuskadi",    name:"EM Euskadi", tema:"salud", page:22, lat:43.2550, lng:-2.9350, dir:"Bilbao (dirección pendiente)", aprox:true, prep:true },
-    { id:"argia",        name:"Argia Fundazioa", tema:"salud", page:23, lat:43.3300, lng:-3.0100, dir:"Trinidad 11, 48990 Getxo", aprox:true, prep:true },
-    { id:"asparbi",      name:"Asparbi", tema:"voz", page:24, lat:43.2730, lng:-2.9650, dir:"San Ignacio, Bilbao (dirección pendiente)", aprox:true, prep:true }
+    { id:"3dlan", name:"3DLAN", page:1, lat:43.3440, lng:-3.0060, dir:"Urgull kalea 4 (Getxo Sormen Hub), 48991 Getxo", aprox:true },
+    { id:"a90grados", name:"A90grados", page:2, lat:43.2960, lng:-2.9900, dir:"Barakaldo (pin de la ficha; sin calle)", aprox:true },
+    { id:"adembi", name:"ADEMBI", page:3, lat:43.2730, lng:-2.9545, dir:"Ibarrekolanda 17 trasera, 48015 Bilbao", aprox:true },
+    { id:"aholab", name:"Aholab (HiTZ-EHU)", page:4, lat:43.2625, lng:-2.9490, dir:"Escuela de Ingeniería de Bilbao, Plaza Ingeniero Torres Quevedo 1, 48013 Bilbao", aprox:true },
+    { id:"apnabi", name:"APNABI Autismo Bizkaia", page:5, lat:43.2650, lng:-2.9480, dir:"Sabino Arana 69, 48012 Bilbao", aprox:true },
+    { id:"argia", name:"Argia Fundazioa", page:6, lat:43.3300, lng:-3.0100, dir:"Trinidad 11, 48990 Getxo", aprox:true },
+    { id:"asparbi", name:"ASPARBI", page:7, lat:43.2730, lng:-2.9650, dir:"San Ignacio, Bilbao (sin calle)", aprox:true },
+    { id:"baiby", name:"bai&by", page:8, lat:43.2617, lng:-2.9310, dir:"Alameda de Urkijo 22, Bilbao", aprox:true },
+    { id:"sanluis", name:"Centro San Luis Indautxu", page:9, lat:43.2625, lng:-2.9400, dir:"Licenciado Poza 31, 48011 Bilbao", aprox:true },
+    { id:"ekhilur", name:"Ekhilur E. Koop.", page:10, lat:43.2565, lng:-2.9215, dir:"Ekonopolo, Harrobi Plaza 4, 48003 Bilbao", aprox:true },
+    { id:"gaman", name:"Gaman", page:11, lat:43.2870, lng:-2.8560, dir:"Polígono Ugaldeguren III, parcela 28B, 48170 Zamudio", aprox:true },
+    { id:"gaptain", name:"Gaptain", page:12, lat:43.4050, lng:-2.9460, dir:"Plentzia (48620)", aprox:true },
+    { id:"gogoa", name:"GOGOA", page:13, lat:43.1540, lng:-2.6100, dir:"Arzubia 10b, 48220 Abadiño", aprox:true },
+    { id:"heuristik", name:"Heuristik", page:14, lat:43.2900, lng:-2.8650, dir:"Zamudio", aprox:true },
+    { id:"ihobe", name:"Ihobe. Soluciones Basadas en la Naturaleza", page:15, lat:43.2612, lng:-2.9395, dir:"Alameda Urquijo 36, 48011 Bilbao", aprox:true },
+    { id:"biobizkaia", name:"IIS Biobizkaia. Plataforma 3B3D", page:16, lat:43.2835, lng:-2.9855, dir:"Hospital Universitario Cruces, Barakaldo", aprox:true },
+    { id:"innitius", name:"Innitius", page:17, lat:43.2935, lng:-2.8690, dir:"Astondo Bidea 612, Parque Tecnológico de Bizkaia", aprox:true },
+    { id:"koiki", name:"Koiki", page:18, lat:43.2580, lng:-2.9250, dir:"Bilbao (sin calle)", aprox:true },
+    { id:"kuvu", name:"Kuvu", page:19, lat:43.2660, lng:-2.9285, dir:"Uribitarte 6, 48001 Bilbao", aprox:true },
+    { id:"lantegi", name:"Lantegi Batuak", page:20, lat:43.3000, lng:-2.9300, dir:"Txorierri etorbidea 12, 48180 Loiu", aprox:true },
+    { id:"ekiola", name:"Lea Artibaiko Ekiola S. Koop.", page:21, lat:43.2480, lng:-2.4800, dir:"Parque solar de Etxebarria", aprox:true },
+    { id:"pappstor", name:"Pappstor", page:22, lat:43.2560, lng:-2.9150, dir:"Bilbao (sin calle)", aprox:true },
+    { id:"qubiz", name:"QUBIZ.team", page:23, lat:43.2627, lng:-2.9250, dir:"Torre BAT, Gran Vía 1, 48001 Bilbao", aprox:true },
+    { id:"sua", name:"SUA SOLUTIONS", page:24, lat:43.2622, lng:-2.9262, dir:"Torre BAT, Bilbao (según ficha antigua)", aprox:true },
+    { id:"ubikare", name:"Ubikare", page:25, lat:43.3050, lng:-2.9730, dir:"Erandio", aprox:true },
+    { id:"urbegi", name:"Urbegi Social Impact", page:26, lat:43.2705, lng:-2.9485, dir:"Edificio Torres Plaza, Ugasko Bidea 1-3, 48014 Bilbao (Deusto)", aprox:true }
   ];
 
   const EDITAR = new URLSearchParams(location.search).get("editar") === "1";
@@ -182,7 +185,8 @@
       draggable: EDITAR,
       title: it.name
     });
-    const tip = `<strong>${it.name}</strong><br><span class="dir">${it.dir}</span>` +
+    // La dirección (it.dir) solo sirve para colocar el pin; no se muestra (Lide, 26/11/2026)
+    const tip = `<strong>${it.name}</strong>` +
       (it.prep ? `<br><span class="prep">Ficha en preparación</span>` : "");
     if (TACTIL) {
       // Móvil y tableta: no hay "pasar por encima", así que el toque abre una tarjeta
